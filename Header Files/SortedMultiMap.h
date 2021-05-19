@@ -13,7 +13,6 @@ using namespace std;
 class SMMIterator;
 typedef bool(*Relation)(TKey, TKey);
 
-
 class KeyValues{
 public:
     TKey key;

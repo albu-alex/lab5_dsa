@@ -11,6 +11,7 @@ SortedMultiMap::SortedMultiMap(Relation r) {
 	this->tree.root = nullptr;
 }
 
+
 void SortedMultiMap::add(TKey c, TValue v) {
 	//TODO - Implementation
 }
