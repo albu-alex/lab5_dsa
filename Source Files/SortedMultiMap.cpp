@@ -6,7 +6,9 @@
 using namespace std;
 
 SortedMultiMap::SortedMultiMap(Relation r) {
-	//TODO - Implementation
+	this->length=0;
+	this->tree.root->info.values = new TValue[INITIAL_CAPACITY];
+	this->tree.root = nullptr;
 }
 
 void SortedMultiMap::add(TKey c, TValue v) {
@@ -25,9 +27,9 @@ bool SortedMultiMap::remove(TKey c, TValue v) {
 
 
 int SortedMultiMap::size() const {
-	//TODO - Implementation
-	return 0;
+	return this->length;
 }
+///Complexity: Theta(1)
 
 bool SortedMultiMap::isEmpty() const {
 	//TODO - Implementation

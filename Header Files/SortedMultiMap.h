@@ -14,10 +14,35 @@ class SMMIterator;
 typedef bool(*Relation)(TKey, TKey);
 
 
+class KeyValues{
+public:
+    TKey key;
+    TValue *values;
+    int capacity;
+    int size;
+    KeyValues* next;
+};
+
+
+class Node{
+public:
+    KeyValues info;
+    Node* left;
+    Node* right;
+};
+
+
+class BST{///Binary Search Tree
+public:
+    Node* root;
+};
+
+#define INITIAL_CAPACITY 11
 class SortedMultiMap {
 	friend class SMMIterator;
     private:
-		//TODO - Representation
+		BST tree;
+		int length;
 
     public:
 
