@@ -9,6 +9,8 @@ typedef int TValue;
 typedef std::pair<TKey, TValue> TElem;
 #define NULL_TVALUE -111111
 #define NULL_TELEM pair<TKey, TValue>(-111111, -111111);
+#define NULL_KEY -11111
+#define INITIAL_CAPACITY 11
 using namespace std;
 class SMMIterator;
 typedef bool(*Relation)(TKey, TKey);
@@ -19,7 +21,6 @@ public:
     TValue *values;
     int capacity;
     int size;
-    KeyValues* next;
 };
 
 
@@ -36,12 +37,12 @@ public:
     Node* root;
 };
 
-#define INITIAL_CAPACITY 11
 class SortedMultiMap {
 	friend class SMMIterator;
     private:
 		BST tree;
 		int length;
+		Relation relation;
 
     public:
 
