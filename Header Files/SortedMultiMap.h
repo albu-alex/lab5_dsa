@@ -19,8 +19,8 @@ class KeyValues{
 public:
     TKey key;
     TValue *values;
-    int capacity;
-    int size;
+    int capacity=INITIAL_CAPACITY;
+    int size=0;
 };
 
 

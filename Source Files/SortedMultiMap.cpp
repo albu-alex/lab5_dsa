@@ -17,6 +17,29 @@ void SortedMultiMap::add(TKey c, TValue v) {
 	///1)When root is nullptr(size=0)
 	///2)When we only have the root(size=1)
 	///3)If key already exists
+	if(this->tree.root == nullptr) {//adding the first key of the tree
+        this->tree.root->info.key = c;
+        this->tree.root->info.values[this->tree.root->info.size] = v;
+        this->tree.root->right = nullptr;
+        this->tree.root->left = nullptr;
+        this->tree.root->info.size++;
+        this->length++;
+        return;
+    }
+    if(this->tree.root->info.key == c){//adding a value to the values of the root
+        this->tree.root->info.values[this->tree.root->info.size] = v;
+        this->tree.root->info.size++;
+        this->length++;
+        return;
+    }
+    Node* current_node = this->tree.root;
+    while(current_node->info.key != c && current_node!= nullptr){
+        if(this->relation(c, current_node->info.key))
+            current_node = current_node->left;
+        else
+            current_node = current_node->right;
+    }
+    //if(current_node == nullptr)
 }
 
 vector<TValue> SortedMultiMap::search(TKey c) const {
