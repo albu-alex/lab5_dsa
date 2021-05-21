@@ -18,7 +18,9 @@ void SortedMultiMap::add(TKey c, TValue v) {
 	///2)When we only have the root(size=1)
 	///3)If key already exists
 	if(this->tree.root == nullptr) {//adding the first key of the tree
-        this->tree.root->info.key = c;
+        this->tree.root = new Node();
+	    this->tree.root->info.key = c;
+	    this->tree.root->info.values = new TValue[INITIAL_CAPACITY];
         this->tree.root->info.values[this->tree.root->info.size] = v;
         this->tree.root->right = nullptr;
         this->tree.root->left = nullptr;
@@ -33,18 +35,42 @@ void SortedMultiMap::add(TKey c, TValue v) {
         return;
     }
     Node* current_node = this->tree.root;
-    while(current_node->info.key != c && current_node!= nullptr){
+    Node* previous_node = new Node();
+    while(current_node != nullptr && current_node->info.key != c){
         if(this->relation(c, current_node->info.key))
             current_node = current_node->left;
         else
             current_node = current_node->right;
     }
-    //if(current_node == nullptr)
+    Node* new_node = new Node();
+    if(current_node->left == nullptr || current_node->right == nullptr){
+        if(this->relation(c, previous_node->info.key))
+            previous_node->left = new_node;
+        else
+            previous_node->right = new_node;
+        new_node->info.key=c;
+        new_node->info.values[current_node->info.size] = v;
+        new_node->info.size++;
+    }
+    current_node->info.values[current_node->info.size] = v;
+    current_node->info.size++;
+    this->length++;
 }
 
 vector<TValue> SortedMultiMap::search(TKey c) const {
-	//TODO - Implementation
-	return vector<TValue>();
+	Node* current_node = this->tree.root;
+	vector<TValue> values;
+	while(current_node != nullptr && current_node->info.key != c){
+        if(this->relation(c, current_node->info.key))
+            current_node = current_node->left;
+        else
+            current_node = current_node->right;
+	}
+	if(current_node != nullptr){
+	    for(int i=0;i<current_node->info.size;i++)
+	        values.push_back(current_node->info.values[i]);
+	}
+	return values;
 }
 
 bool SortedMultiMap::remove(TKey c, TValue v) {
@@ -70,6 +96,7 @@ bool SortedMultiMap::isEmpty() const {
 SMMIterator SortedMultiMap::iterator() const {
 	return SMMIterator(*this);
 }
+///Complexity: Theta(1)
 
 SortedMultiMap::~SortedMultiMap() {
 	//TODO - Implementation
