@@ -10,7 +10,11 @@ private:
 	const SortedMultiMap& map;
 	SMMIterator(const SortedMultiMap& map);
 
-	//TODO - Representation
+	BST tree;
+	Node** stack;
+	int stack_index;
+	int values_index;
+	Node* current_node;
 
 public:
 	void first();

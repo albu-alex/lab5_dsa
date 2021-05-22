@@ -28,12 +28,12 @@ void testAll(){
     assert(v.size()==2);
     v= smm.search(3);
     assert(v.size()==0);
-    SMMIterator it = smm.iterator();
-    it.first();
-    while (it.valid()){
-    	TElem e = it.getCurrent();
-    	it.next();
-    }
+//    SMMIterator it = smm.iterator();
+//    it.first();
+//    while (it.valid()){
+//    	TElem e = it.getCurrent();
+//    	it.next();
+//    }
     assert(smm.remove(1, 2) == true);
     assert(smm.remove(1, 3) == true);
     assert(smm.remove(2, 1) == false);

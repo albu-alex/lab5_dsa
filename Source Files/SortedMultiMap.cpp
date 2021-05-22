@@ -98,8 +98,10 @@ bool SortedMultiMap::remove(TKey c, TValue v) {
                 i++;
             if(i==current_node->info.size)
                 return false;
-            while(i<current_node->info.size-1)
-                current_node->info.values[i] = current_node->info.values[i+1];
+            while(i<current_node->info.size-1) {
+                current_node->info.values[i] = current_node->info.values[i + 1];
+                i++;
+            }
             current_node->info.size--;
             this->length--;
             return true;
@@ -123,6 +125,13 @@ bool SortedMultiMap::remove(TKey c, TValue v) {
             this->length--;
             return true;
         }
+        Node* node_to_be_removed = current_node;
+        current_node = current_node->left;
+        while(current_node != nullptr)
+            current_node = current_node->right;
+        node_to_be_removed = current_node;
+        current_node = nullptr;
+        this->length--;
         return true;
     }
     if(current_node->info.size > 1){
