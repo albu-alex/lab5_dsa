@@ -43,14 +43,15 @@ void SortedMultiMap::add(TKey c, TValue v) {
             current_node = current_node->right;
     }
     Node* new_node = new Node();
-    if(current_node->left == nullptr || current_node->right == nullptr){
+    if(current_node == nullptr){
         if(this->relation(c, previous_node->info.key))
             previous_node->left = new_node;
         else
             previous_node->right = new_node;
         new_node->info.key=c;
-        new_node->info.values[current_node->info.size] = v;
+        new_node->info.values[new_node->info.size] = v;
         new_node->info.size++;
+        return;
     }
     current_node->info.values[current_node->info.size] = v;
     current_node->info.size++;
@@ -79,7 +80,71 @@ bool SortedMultiMap::remove(TKey c, TValue v) {
 	///2)When we remove the only element associated to a key
 	///3)When we remove an element associated to a key
 	///4)When we remove the only element associated to a root
-    return false;
+    Node* current_node = this->tree.root;
+    Node* previous_node;
+    while(current_node != nullptr && current_node->info.key != c){
+        previous_node = current_node;
+        if(this->relation(c, current_node->info.key))
+            current_node = current_node->left;
+        else
+            current_node = current_node->right;
+    }
+    if(current_node == nullptr)
+        return false;
+    if(current_node->left == nullptr && current_node->right == nullptr){
+        if(current_node->info.size > 1){
+            int i=0;
+            while(i<current_node->info.size && v != current_node->info.values[i])
+                i++;
+            if(i==current_node->info.size)
+                return false;
+            while(i<current_node->info.size-1)
+                current_node->info.values[i] = current_node->info.values[i+1];
+            current_node->info.size--;
+            this->length--;
+            return true;
+        }
+        if(current_node->info.values[0] != v)
+            return false;
+        current_node = previous_node;
+        this->length--;
+        return true;
+    }
+    if(current_node->left != nullptr && current_node->right!= nullptr){
+        if(current_node->info.size > 1){
+            int i=0;
+            while(i<current_node->info.size && v != current_node->info.values[i])
+                i++;
+            if(i==current_node->info.size)
+                return false;
+            while(i<current_node->info.size-1)
+                current_node->info.values[i] = current_node->info.values[i+1];
+            current_node->info.size--;
+            this->length--;
+            return true;
+        }
+        return true;
+    }
+    if(current_node->info.size > 1){
+        int i=0;
+        while(i<current_node->info.size && v != current_node->info.values[i])
+            i++;
+        if(i==current_node->info.size)
+            return false;
+        while(i<current_node->info.size-1)
+            current_node->info.values[i] = current_node->info.values[i+1];
+        current_node->info.size--;
+        this->length--;
+        return true;
+    }
+    if(current_node->info.values[0] != v)
+        return false;
+    if(current_node->left != nullptr)
+        current_node = current_node->left;
+    else
+        current_node = current_node->right;
+    this->length--;
+    return true;
 }
 
 
