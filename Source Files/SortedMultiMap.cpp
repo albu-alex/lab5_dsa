@@ -37,6 +37,7 @@ void SortedMultiMap::add(TKey c, TValue v) {
     Node* current_node = this->tree.root;
     Node* previous_node = new Node();
     while(current_node != nullptr && current_node->info.key != c){
+        previous_node = current_node;
         if(this->relation(c, current_node->info.key))
             current_node = current_node->left;
         else
@@ -44,6 +45,7 @@ void SortedMultiMap::add(TKey c, TValue v) {
     }
     Node* new_node = new Node();
     if(current_node == nullptr){
+        new_node->info.values = new TValue[INITIAL_CAPACITY];
         if(this->relation(c, previous_node->info.key))
             previous_node->left = new_node;
         else
@@ -51,6 +53,7 @@ void SortedMultiMap::add(TKey c, TValue v) {
         new_node->info.key=c;
         new_node->info.values[new_node->info.size] = v;
         new_node->info.size++;
+        this->length++;
         return;
     }
     current_node->info.values[current_node->info.size] = v;

@@ -20,11 +20,44 @@ SMMIterator::SMMIterator(const SortedMultiMap& d) : map(d){
 }
 
 void SMMIterator::first(){
-	//TODO - Implementation
+    this->stack_index = -1;
+    this->values_index = 0;
+    this->current_node = this->map.tree.root;
+    while(this->current_node != nullptr){
+        this->stack_index++;
+        this->stack[this->stack_index] = this->current_node;
+        this->current_node = this->current_node->left;
+    }
+    if(this->stack_index != -1){
+        this->current_node = this->stack[this->stack_index];
+    }
+    else
+        this->current_node = nullptr;
 }
 
 void SMMIterator::next(){
-	//TODO - Implementation
+	if(!this->valid())
+	    throw exception();
+    if(this->values_index < this->current_node->info.size){
+	    this->values_index++;
+	    return;
+	}
+	this->values_index = 0;
+	Node* node = this->stack[this->stack_index];
+    this->stack[this->stack_index] = nullptr;
+    this->stack_index--;
+    if(node->right != nullptr){
+        node = node->right;
+        while(node != nullptr){
+            this->stack_index++;
+            this->stack[this->stack_index] = node;
+            node = node->left;
+        }
+    }
+    if(this->stack_index != -1)
+        this->current_node = this->stack[this->stack_index];
+    else
+        this->current_node = nullptr;
 }
 
 bool SMMIterator::valid() const{
