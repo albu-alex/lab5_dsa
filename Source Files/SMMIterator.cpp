@@ -38,13 +38,12 @@ void SMMIterator::first(){
 void SMMIterator::next(){
 	if(!this->valid())
 	    throw exception();
-    if(this->values_index < this->current_node->info.size){
+    if(this->values_index < this->current_node->info.size - 1){
 	    this->values_index++;
 	    return;
 	}
 	this->values_index = 0;
 	Node* node = this->stack[this->stack_index];
-    this->stack[this->stack_index] = nullptr;
     this->stack_index--;
     if(node->right != nullptr){
         node = node->right;

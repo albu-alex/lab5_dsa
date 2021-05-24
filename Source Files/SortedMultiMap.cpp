@@ -13,10 +13,6 @@ SortedMultiMap::SortedMultiMap(Relation r) {
 
 
 void SortedMultiMap::add(TKey c, TValue v) {
-	///Possible cases:
-	///1)When root is nullptr(size=0)
-	///2)When we only have the root(size=1)
-	///3)If key already exists
 	if(this->tree.root == nullptr) {//adding the first key of the tree
         this->tree.root = new Node();
 	    this->tree.root->info.key = c;
@@ -78,11 +74,6 @@ vector<TValue> SortedMultiMap::search(TKey c) const {
 }
 
 bool SortedMultiMap::remove(TKey c, TValue v) {
-	///Possible cases:
-	///1)When we only have the root
-	///2)When we remove the only element associated to a key
-	///3)When we remove an element associated to a key
-	///4)When we remove the only element associated to a root
     Node* current_node = this->tree.root;
     Node* previous_node;
     while(current_node != nullptr && current_node->info.key != c){
@@ -122,8 +113,10 @@ bool SortedMultiMap::remove(TKey c, TValue v) {
                 i++;
             if(i==current_node->info.size)
                 return false;
-            while(i<current_node->info.size-1)
-                current_node->info.values[i] = current_node->info.values[i+1];
+            while(i<current_node->info.size-1) {
+                current_node->info.values[i] = current_node->info.values[i + 1];
+                i++;
+            }
             current_node->info.size--;
             this->length--;
             return true;
@@ -143,8 +136,10 @@ bool SortedMultiMap::remove(TKey c, TValue v) {
             i++;
         if(i==current_node->info.size)
             return false;
-        while(i<current_node->info.size-1)
-            current_node->info.values[i] = current_node->info.values[i+1];
+        while(i<current_node->info.size-1) {
+            current_node->info.values[i] = current_node->info.values[i + 1];
+            i++;
+        }
         current_node->info.size--;
         this->length--;
         return true;
