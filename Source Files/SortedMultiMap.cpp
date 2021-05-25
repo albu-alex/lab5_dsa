@@ -25,6 +25,9 @@ void SortedMultiMap::add(TKey c, TValue v) {
         return;
     }
     if(this->tree.root->info.key == c){//adding a value to the values of the root
+        if(this->tree.root->info.size == this->tree.root->info.capacity-1){
+            this->resize(this->tree.root->info);
+        }
         this->tree.root->info.values[this->tree.root->info.size] = v;
         this->tree.root->info.size++;
         this->length++;
@@ -52,9 +55,21 @@ void SortedMultiMap::add(TKey c, TValue v) {
         this->length++;
         return;
     }
+    if(current_node->info.size == current_node->info.capacity-1){
+        this->resize(current_node->info);
+    }
     current_node->info.values[current_node->info.size] = v;
     current_node->info.size++;
     this->length++;
+}
+
+void SortedMultiMap::resize(KeyValues &keyValues) {
+    keyValues.capacity*=2;
+    auto resized_array = new TValue[keyValues.capacity];
+    for(int i=0;i<keyValues.capacity/2;i++)
+        resized_array[i] = keyValues.values[i];
+    delete[] keyValues.values;
+    keyValues.values = resized_array;
 }
 
 vector<TValue> SortedMultiMap::search(TKey c) const {
@@ -104,6 +119,8 @@ bool SortedMultiMap::remove(TKey c, TValue v) {
             return false;
         current_node = previous_node;
         this->length--;
+        if(this->length == 0)
+            this->tree.root = nullptr;
         return true;
     }
     if(current_node->left != nullptr && current_node->right!= nullptr){
@@ -146,6 +163,14 @@ bool SortedMultiMap::remove(TKey c, TValue v) {
     }
     if(current_node->info.values[0] != v)
         return false;
+    if(current_node == this->tree.root){
+        if(this->tree.root->left != nullptr)
+            this->tree.root = this->tree.root->left;
+        else
+            this->tree.root = this->tree.root->right;
+        this->length--;
+        return true;
+    }
     if(current_node->left != nullptr)
         current_node = current_node->left;
     else

@@ -68,6 +68,9 @@ class SortedMultiMap {
     // returns an iterator for the sorted multimap. The iterator will returns the pairs as required by the relation (given to the constructor)	
     SMMIterator iterator() const;
 
+    // This is used in order to resize the dynamic array of values of a key
+    void resize(KeyValues& keyValues);
+
     // destructor
     ~SortedMultiMap();
 };
