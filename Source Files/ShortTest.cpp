@@ -3,6 +3,7 @@
 #include "SortedMultiMap.h"
 #include "SMMIterator.h"
 #include <exception>
+#include <iostream>
 #include <vector>
 
 using namespace std;
@@ -38,5 +39,10 @@ void testAll(){
     assert(smm.remove(1, 3) == true);
     assert(smm.remove(2, 1) == false);
     assert(smm.isEmpty());
+    smm.add(1, 2);
+    smm.add(1, 3);
+    smm.add(1, 4);
+    assert(smm.trimValues(1) == 2);
+    assert(smm.trimValues(1) == 0);
 }
 

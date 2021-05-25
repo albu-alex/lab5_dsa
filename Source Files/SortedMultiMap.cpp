@@ -10,6 +10,7 @@ SortedMultiMap::SortedMultiMap(Relation r) {
 	this->tree.root = nullptr;
 	this->relation=r;
 }
+///Complexity: Theta(1)
 
 
 void SortedMultiMap::add(TKey c, TValue v) {
@@ -62,6 +63,8 @@ void SortedMultiMap::add(TKey c, TValue v) {
     current_node->info.size++;
     this->length++;
 }
+///Complexity: Best case:Theta(1), Worst case:Theta(height_of_tree+values_size) => Average case: O(height_of_tree+values_size)
+
 
 void SortedMultiMap::resize(KeyValues &keyValues) {
     keyValues.capacity*=2;
@@ -71,6 +74,8 @@ void SortedMultiMap::resize(KeyValues &keyValues) {
     delete[] keyValues.values;
     keyValues.values = resized_array;
 }
+///Complexity: Theta(capacity/2)
+
 
 vector<TValue> SortedMultiMap::search(TKey c) const {
 	Node* current_node = this->tree.root;
@@ -87,6 +92,8 @@ vector<TValue> SortedMultiMap::search(TKey c) const {
 	}
 	return values;
 }
+///Complexity: Best case: Theta(1), Worst case: Theta(height_of_tree) => Average case: O(height_of_tree)
+
 
 bool SortedMultiMap::remove(TKey c, TValue v) {
     Node* current_node = this->tree.root;
@@ -178,12 +185,50 @@ bool SortedMultiMap::remove(TKey c, TValue v) {
     this->length--;
     return true;
 }
+///Complexity: Best case: Theta(1), Worst case:Theta(height_of_tree+values_size) => Average complexity: O(height_of_tree+values_size)
 
 
 int SortedMultiMap::size() const {
 	return this->length;
 }
 ///Complexity: Theta(1)
+
+int SortedMultiMap::trimValues(int maxSize) {
+    int elements_removed = 0;
+    auto stack = new Node*[this->length];
+    int stack_index = -1;
+    Node* current_node = this->tree.root;
+    while(current_node != nullptr){
+        stack_index++;
+        if(current_node->info.size > maxSize){
+            elements_removed += current_node->info.size - maxSize;
+            current_node->info.size = maxSize;
+        }
+        stack[stack_index] = current_node;
+        current_node = current_node->left;
+    }
+    if(stack_index != -1)
+        current_node = stack[stack_index];
+    else
+        current_node = nullptr;
+    while(current_node != nullptr && stack_index !=-1){
+        current_node = stack[stack_index];
+        stack_index--;
+        if(current_node->right != nullptr){
+            while(current_node != nullptr){
+                stack_index++;
+                if(current_node->info.size > maxSize){
+                    elements_removed += current_node->info.size - maxSize;
+                    current_node->info.size = maxSize;
+                }
+                stack[stack_index] = current_node;
+                current_node = current_node->left;
+            }
+        }
+    }
+    return elements_removed;
+}
+///Complexity: Theta(N)
 
 bool SortedMultiMap::isEmpty() const {
 	return this->length==0;
@@ -196,5 +241,29 @@ SMMIterator SortedMultiMap::iterator() const {
 ///Complexity: Theta(1)
 
 SortedMultiMap::~SortedMultiMap() {
-	//TODO - Implementation
+    Node* current_node = this->tree.root;
+    auto stack = new Node*[this->length];
+    int stack_index = -1;
+    while(current_node != nullptr){
+        stack_index++;
+        stack[stack_index] = current_node;
+        current_node = current_node->left;
+    }
+    if(stack_index != -1)
+        current_node = stack[stack_index];
+    else
+        current_node = nullptr;
+    while(current_node != nullptr && stack_index !=-1){
+        current_node = stack[stack_index];
+        delete stack[stack_index];
+        stack_index--;
+        if(current_node->right != nullptr){
+            while(current_node != nullptr){
+                stack_index++;
+                stack[stack_index] = current_node;
+                current_node = current_node->left;
+            }
+        }
+    }
 }
+///Complexity: Theta(N)

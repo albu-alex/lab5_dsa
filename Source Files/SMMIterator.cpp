@@ -1,6 +1,7 @@
 #include "SMMIterator.h"
 #include "SortedMultiMap.h"
 
+///Inorder iterator(left - root - right)
 SMMIterator::SMMIterator(const SortedMultiMap& d) : map(d){
 	this->tree = this->map.tree;
 	this->stack = new Node*[this->map.length];
@@ -18,6 +19,7 @@ SMMIterator::SMMIterator(const SortedMultiMap& d) : map(d){
 	else
 	    this->current_node = nullptr;
 }
+///Complexity: Best case: Theta(1), Worst case:Theta(N) => Average case: O(N)
 
 void SMMIterator::first(){
     this->stack_index = -1;
@@ -34,6 +36,7 @@ void SMMIterator::first(){
     else
         this->current_node = nullptr;
 }
+///Complexity: Best case: Theta(1), Worst case:Theta(N) => Average case: O(N)
 
 void SMMIterator::next(){
 	if(!this->valid())
@@ -58,17 +61,19 @@ void SMMIterator::next(){
     else
         this->current_node = nullptr;
 }
+///Complexity: Best case: Theta(1), Worst case:Theta(N) => Average case: O(N)
 
 bool SMMIterator::valid() const{
 	if(current_node == nullptr)
 	    return false;
 	return true;
 }
+///Complexity: Theta(1)
 
 TElem SMMIterator::getCurrent() const{
 	if(!valid())
 	    throw exception();
 	return TElem{this->current_node->info.key, this->current_node->info.values[this->values_index]};
 }
-
+///Complexity: Theta(1)
 

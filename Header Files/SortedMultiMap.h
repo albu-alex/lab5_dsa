@@ -71,6 +71,13 @@ class SortedMultiMap {
     // This is used in order to resize the dynamic array of values of a key
     void resize(KeyValues& keyValues);
 
+    //limits the number of values for a key to maxSize.
+    // From the keys with more than maxSize values, some values (does not matter which ones) will be removed until the number of associated values will be equal to maxSize.
+    // If a key has less than maxSize values, they will not be changed. The limitation does not have to be respected after the call to the function (so new pairs can be added).
+    // Returns the total number of removed values.
+    int trimValues(int maxSize);
+
+
     // destructor
     ~SortedMultiMap();
 };
